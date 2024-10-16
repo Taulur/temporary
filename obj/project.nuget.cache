@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "jno/Mx8+Q4jiJEryP0SY7weMug8T5mMK7KuavQlE/TiCMPW9u0mPcO5D0BzMEFVbsi5bEXuprVYSuiQT5WV16g==",
+  "success": true,
+  "projectFilePath": "C:\\chubarkov\\WinFormsApp1\\WinFormsApp1.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\st310-02\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\st310-02\\.nuget\\packages\\telegram.bot\\19.0.0\\telegram.bot.19.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
