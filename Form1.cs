@@ -21,7 +21,7 @@ namespace WinFormsApp1
         bool panel3mode = false;
         bool panel4mode = false;
         bool panel5mode = false;
-        string api = "7837564819:AAHc4ze4TAgy5TYfUGj63pHHVM5EH94QNcI";
+        string api = "";
         string id = "1170255486";
 
 
@@ -157,10 +157,10 @@ namespace WinFormsApp1
         private void button7_Click(object sender, EventArgs e)
         {
             /* string recevier = textBox2.Text;
-             MailAddress from = new MailAddress("matuhazapominalkin@gmail.com", "Менеджер");
+             MailAddress from = new MailAddress("matuhazapominalkin@gmail.com", "ГЊГҐГ­ГҐГ¤Г¦ГҐГ°");
              MailAddress to = new MailAddress(recevier);
              MailMessage m = new MailMessage(from, to);
-             m.Subject = "Пришла новая задача";
+             m.Subject = "ГЏГ°ГЁГёГ«Г  Г­Г®ГўГ Гї Г§Г Г¤Г Г·Г ";
              m.Body = textBox1.Text;
              m.IsBodyHtml = true;
              SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
@@ -188,11 +188,11 @@ namespace WinFormsApp1
             {
                 listBox1.Items.Add(textBox6.Text + " " + textBox5.Text);
                 ComboRefresh();
-                MessageBox.Show("Контакт успешно добавлен");
+                MessageBox.Show("ГЉГ®Г­ГІГ ГЄГІ ГіГ±ГЇГҐГёГ­Г® Г¤Г®ГЎГ ГўГ«ГҐГ­");
             }
             else
             {
-                MessageBox.Show("Данные введены неверно");
+                MessageBox.Show("Г„Г Г­Г­Г»ГҐ ГўГўГҐГ¤ГҐГ­Г» Г­ГҐГўГҐГ°Г­Г®");
             }
 
         }
@@ -202,12 +202,12 @@ namespace WinFormsApp1
             if ((textBox1.Text.Length != 0) && (textBox7.Text.Length != 0) && (comboBox1.Text.Length != 0))
             {
                 var bot = new TelegramBotClient(api);
-                await bot.SendTextMessageAsync(id, "Название : " + textBox1.Text + "\nОтветственность : " + comboBox1.Text + "\nТекст задачи : " + textBox7.Text);
-                MessageBox.Show("Задача успешно создана");
+                await bot.SendTextMessageAsync(id, "ГЌГ Г§ГўГ Г­ГЁГҐ : " + textBox1.Text + "\nГЋГІГўГҐГІГ±ГІГўГҐГ­Г­Г®Г±ГІГј : " + comboBox1.Text + "\nГ’ГҐГЄГ±ГІ Г§Г Г¤Г Г·ГЁ : " + textBox7.Text);
+                MessageBox.Show("Г‡Г Г¤Г Г·Г  ГіГ±ГЇГҐГёГ­Г® Г±Г®Г§Г¤Г Г­Г ");
             }
             else
             {
-                MessageBox.Show("Данные введены неверно");
+                MessageBox.Show("Г„Г Г­Г­Г»ГҐ ГўГўГҐГ¤ГҐГ­Г» Г­ГҐГўГҐГ°Г­Г®");
             }
             
         }
