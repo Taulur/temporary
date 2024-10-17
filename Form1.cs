@@ -4,7 +4,6 @@ using System;
 using System.Net;
 using System.IO;
 using System.Threading.Tasks;
-using Telegram.Bot.Types;
 using Telegram.Bot;
 
 namespace WinFormsApp1
@@ -16,6 +15,21 @@ namespace WinFormsApp1
             InitializeComponent();
         }
 
+        class Task()
+        {
+            public string date;
+            public string main;
+            public string text;
+
+        }
+
+        class Contact()
+        {
+            public string name;
+            public string number;
+        }
+
+
         bool panel1mode = false;
         bool panel2mode = false;
         bool panel3mode = false;
@@ -24,7 +38,20 @@ namespace WinFormsApp1
         string api = "";
         string id = "1170255486";
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            panel1.Location = new Point(-1200, 0);
+            panel2.Location = new Point(-1200, 0);
+            panel3.Location = new Point(-1200, 0);
+            panel4.Location = new Point(-1200, 0);
+            panel5.Location = new Point(-1200, 0);
+            monthCalendar1.Visible = false;
+            DataLoad();
+        }
 
+        List<Contact> contacts = new List<Contact>();
+        List<Task> tasks = new List<Task>();
+        List<Task> todayTasks = new List<Task>();
 
         void BubbleScreen(Button button, Panel panel, bool mode)
         {
@@ -45,11 +72,88 @@ namespace WinFormsApp1
                     Thread.Sleep(25);
                 }
             }
-
-
-
-
         }
+
+        void ComboRefresh()
+        {
+            comboBox1.Items.Clear();
+            foreach (Task task in tasks)
+            {
+                comboBox1.Items.Add(task.main);
+            }
+        }
+
+        void DataLoad()
+        {
+            if (File.Exists("Tasks.txt") && File.Exists("Contacts.txt"))
+            {
+                todayTasks.Clear();
+                tasks.Clear();
+                contacts.Clear();
+
+                StreamReader sr = File.OpenText("Tasks.txt");
+
+                while (!sr.EndOfStream )
+                {
+
+                    Task task = new Task();
+                    string[] temp = sr.ReadLine().Split('|');
+                    task.date = temp[0];
+                    task.main = temp[1];
+                    task.text = temp[2];
+
+                    string[] isToday = temp[0].Split(' ');
+                    string today = DateTime.Today.ToString();
+                    string[] todayDate = today.Split(' ');
+
+                    if (isToday[0] == todayDate[0])
+                    {
+                        todayTasks.Add(task);
+                    }
+
+                    tasks.Add(task);
+                }
+
+                sr.Close();
+
+                StreamReader st = File.OpenText("Contacts.txt");
+
+                while (!st.EndOfStream)
+                {
+
+                    Contact contact = new Contact();
+                    string[] temp = st.ReadLine().Split('|');
+                    contact.name = temp[0];
+                    contact.number = temp[1];
+
+                    contacts.Add(contact);
+
+                }
+
+                st.Close();
+
+                int i = 1;
+                int j = 1;
+
+                listBox1.Items.Clear();
+                listBox2.Items.Clear();
+
+                foreach (Task task in tasks)
+                {
+                    listBox2.Items.Add($"Задача {i} | Дата : {task.date}, Ответст.: {task.main}, Текст : {task.text}");
+                    i++;
+                }
+                foreach (Contact contact in contacts)
+                {
+                    listBox1.Items.Add($"Контакт {j} | Имя : {contact.name}, Номер : {contact.number}");
+                    j++;
+                }
+
+                ComboRefresh();
+            }
+        }
+
+      
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -145,22 +249,15 @@ namespace WinFormsApp1
             }*/
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            panel1.Location = new Point(-1200, 0);
-            panel2.Location = new Point(-1200, 0);
-            panel3.Location = new Point(-1200, 0);
-            panel4.Location = new Point(-1200, 0);
-            panel5.Location = new Point(-1200, 0);
-        }
+
 
         private void button7_Click(object sender, EventArgs e)
         {
             /* string recevier = textBox2.Text;
-             MailAddress from = new MailAddress("matuhazapominalkin@gmail.com", "ГЊГҐГ­ГҐГ¤Г¦ГҐГ°");
+             MailAddress from = new MailAddress("matuhazapominalkin@gmail.com", "Менеджер");
              MailAddress to = new MailAddress(recevier);
              MailMessage m = new MailMessage(from, to);
-             m.Subject = "ГЏГ°ГЁГёГ«Г  Г­Г®ГўГ Гї Г§Г Г¤Г Г·Г ";
+             m.Subject = "Пришла новая задача";
              m.Body = textBox1.Text;
              m.IsBodyHtml = true;
              SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
@@ -173,26 +270,32 @@ namespace WinFormsApp1
 
         }
 
-        void ComboRefresh()
-        {
-            comboBox1.Items.Clear();
-            foreach (string obj in listBox1.Items)
-            {
-                comboBox1.Items.Add(obj);
-            }
-        }
-
         private void button9_Click(object sender, EventArgs e)
         {
             if ((textBox6.Text.Length != 0) && (textBox5.Text.Length != 0))
             {
-                listBox1.Items.Add(textBox6.Text + " " + textBox5.Text);
-                ComboRefresh();
-                MessageBox.Show("ГЉГ®Г­ГІГ ГЄГІ ГіГ±ГЇГҐГёГ­Г® Г¤Г®ГЎГ ГўГ«ГҐГ­");
+
+                if (File.Exists("Contacts.txt"))
+                {
+                    StreamWriter sr = File.AppendText("Contacts.txt");
+
+
+                    sr.WriteLine($"{textBox6.Text}|{textBox5.Text}");
+
+                    sr.Close();
+                }
+
+                Contact contact = new Contact();
+                contact.name = textBox6.Text;
+                contact.number = textBox5.Text;
+                contacts.Add(contact);
+                DataLoad();
+
+                MessageBox.Show("Контакт успешно добавлен");
             }
             else
             {
-                MessageBox.Show("Г„Г Г­Г­Г»ГҐ ГўГўГҐГ¤ГҐГ­Г» Г­ГҐГўГҐГ°Г­Г®");
+                MessageBox.Show("Данные введены неверно");
             }
 
         }
@@ -200,16 +303,84 @@ namespace WinFormsApp1
         private async void button7_Click_1(object sender, EventArgs e)
         {
             if ((textBox1.Text.Length != 0) && (textBox7.Text.Length != 0) && (comboBox1.Text.Length != 0))
+
+             
             {
+
+                if (File.Exists("Tasks.txt"))
+                {
+                    StreamWriter sr = File.AppendText("Tasks.txt");
+
+
+                    sr.WriteLine($"{textBox1.Text}|{comboBox1.Text}|{textBox7.Text}");
+
+                    sr.Close();
+                }
+
                 var bot = new TelegramBotClient(api);
-                await bot.SendTextMessageAsync(id, "ГЌГ Г§ГўГ Г­ГЁГҐ : " + textBox1.Text + "\nГЋГІГўГҐГІГ±ГІГўГҐГ­Г­Г®Г±ГІГј : " + comboBox1.Text + "\nГ’ГҐГЄГ±ГІ Г§Г Г¤Г Г·ГЁ : " + textBox7.Text);
-                MessageBox.Show("Г‡Г Г¤Г Г·Г  ГіГ±ГЇГҐГёГ­Г® Г±Г®Г§Г¤Г Г­Г ");
+                await bot.SendTextMessageAsync(id, "Дата выполнения : " + textBox1.Text + "\nОтветственность : " + comboBox1.Text + "\nТекст задачи : " + textBox7.Text);
+
+                Task task = new Task();
+                task.date = textBox1.Text;
+                task.main = comboBox1.Text;
+                task.text = textBox7.Text;
+                tasks.Add(task);
+                DataLoad();
+                MessageBox.Show("Задача успешно создана");
             }
             else
             {
-                MessageBox.Show("Г„Г Г­Г­Г»ГҐ ГўГўГҐГ¤ГҐГ­Г» Г­ГҐГўГҐГ°Г­Г®");
+                MessageBox.Show("Данные введены неверно");
             }
-            
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_MouseEnter(object sender, EventArgs e)
+        {
+            monthCalendar1.Visible = true;
+        }
+
+        private void monthCalendar1_MouseLeave(object sender, EventArgs e)
+        {
+            monthCalendar1.Visible = false;
+        }
+
+        private void textBox1_MouseLeave(object sender, EventArgs e)
+        {
+        }
+
+        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        {
+
+        }
+
+        private void monthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            textBox1.Text = monthCalendar1.SelectionStart.ToString();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (todayTasks.Count > 0)
+            {
+                int i = 1;
+                foreach (Task task in todayTasks)
+                {
+                    MessageBox.Show($"Задача {i} | Дата : {task.date}, Ответст.: {task.main}, Текст : {task.text}");
+                        i++;
+                }
+            }
+            else
+            {
+                MessageBox.Show("На сегодня задач нет!");
+            }
+
+           
         }
     }
 }
